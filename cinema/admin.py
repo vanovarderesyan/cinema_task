@@ -25,7 +25,7 @@ class MyAdminForm(forms.ModelForm):
             start_date = dateutil.parser.parse(f"{self.data.get('start_date_0')} {self.data.get('start_date_1')}")
             end_date =  start_date + timedelta(minutes=movie.duration)
             if Schedule.objects.filter(room_id=self.data.get('room'),end_date__gt=start_date,start_date__lt=end_date).exists():
-                raise ValidationError({"start_date": "This identifier is already in use."})
+                raise ValidationError({"start_date": "The date is unavailable, please chose another date "})
         super().clean()
 
 class ScheduleAdmin(admin.ModelAdmin):
