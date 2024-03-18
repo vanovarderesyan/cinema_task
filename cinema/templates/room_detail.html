@@ -1,0 +1,19 @@
+
+{% block content %}
+  <h1> Room "{{room }}" </h1>
+  <p>  Row Count   {{room.row_count }}</p>
+  <p>  Seat Count  {{room.seat_count }} </p>
+
+  {% if movies %}
+    <ul>
+      {% for movie in movies %}
+      <li>
+        <a href="{{ movie.get_absolute_url }}">{{ movie.movie.name }}</a>
+        ({{movie.start_date}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No event in the room</p>
+  {% endif %}
+{% endblock %}

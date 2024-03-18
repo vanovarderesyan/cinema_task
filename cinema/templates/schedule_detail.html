@@ -1,0 +1,197 @@
+{% block content %}
+<h1> Schedule Room  "{{schedule.room }}" </h1>
+<p> Schedule Row Count {{schedule.room.row_count }}</p>
+<p> Seat Count {{schedule.room.seat_count }} </p>
+<p> Movie name {{schedule.movie }} </p>
+<p> Movie duration {{schedule.movie.duration }} </p>
+<div style="display: flex;flex-direction: column;">
+<div>
+    <img src="{{ schedule.movie.poster.url }}" style="height: 300px; width: 300px; display: block;">
+
+</div>
+
+<div class="theatre" >
+    <div class="cinema-seats right">
+        {% for row in seats %}
+        <div class="cinema-row row-1">
+            {% for seat in row.seats %}
+                {% if seat.free %}
+                <div class="seat" onclick=openForm({{row.index}},{{seat.index}})></div>
+                {% else %}
+                <div class="seat active"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="bookingPopup">
+    <div class="formPopup" id="bookingPopup">
+        <form action="/booking/{{schedule.pk }}" class="formContainer" method="POST">
+            {% csrf_token %}
+            <h2>Booking</h2>
+            <strong>E-mail</strong>
+            <label for="email">
+            </label>
+            <input type="text" id="email"  placeholder="Your Email" name="email" required>
+            <input type="text" hidden id="row_index" name="row_index">
+            <input type="text" hidden id="seat_index" name="seat_index">
+            <button type="submit" class="btn">Book</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+</div>
+</div>
+
+<style>
+    body {
+        margin: 60px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .openBtn {
+        display: flex;
+        justify-content: left;
+    }
+
+    .openButton {
+        border: none;
+        border-radius: 5px;
+        background-color: #1c87c9;
+        color: white;
+        padding: 14px 20px;
+        cursor: pointer;
+        position: fixed;
+    }
+
+    .loginPopup {
+        position: relative;
+        text-align: center;
+        width: 100%;
+    }
+
+    .formPopup {
+        display: none;
+        position: fixed;
+        left: 45%;
+        top: 5%;
+        transform: translate(-50%, 5%);
+        border: 3px solid #999999;
+        z-index: 9;
+    }
+
+    .formContainer {
+        max-width: 300px;
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    .formContainer input[type=text],
+    .formContainer input[type=password] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 20px 0;
+        border: none;
+        background: #eee;
+    }
+
+    .formContainer input[type=text]:focus,
+    .formContainer input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .formContainer .btn {
+        padding: 12px 20px;
+        border: none;
+        background-color: #8ebf42;
+        color: #fff;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 15px;
+        opacity: 0.8;
+    }
+
+    .formContainer .cancel {
+        background-color: #cc0000;
+    }
+
+    .formContainer .btn:hover,
+    .openButton:hover {
+        opacity: 1;
+    }
+
+    .theatre {
+        display: flex;
+        margin-top: 100px;
+        top: 70%;
+        left: 50%;
+    }
+
+    .cinema-seats {
+        display: flex;
+
+        .seat {
+            cursor: pointer;
+
+            &:hover:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 7px;
+            }
+
+            &.active {}
+
+            &.active:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.6);
+                border-radius: 7px;
+            }
+        }
+    }
+
+    .right {
+        margin-left: 70px;
+
+        .cinema-row {
+            transform: skew(0deg);
+            margin: 0 10px;
+        }
+
+        .seat {
+            width: 35px;
+            height: 50px;
+            border-radius: 7px;
+            background: linear-gradient(to top, #761818, #761818, #761818, #761818, #761818, #B54041, #F3686A);
+            margin-bottom: 10px;
+            transform: skew(-8deg);
+            margin-top: -32px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5)
+        }
+    }
+</style>
+<script>
+    function openForm(row_index,seat_index) {
+        document.getElementById("bookingPopup").style.display = "block";
+        document.getElementById("row_index").value =row_index;
+        document.getElementById("seat_index").value = seat_index;
+
+    }
+    function closeForm() {
+        document.getElementById("bookingPopup").style.display = "none";
+    }
+</script>
+
+
+{% endblock %}

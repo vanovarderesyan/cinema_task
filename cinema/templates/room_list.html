@@ -1,0 +1,17 @@
+
+{% block content %}
+  <h1>Room List</h1>
+
+  {% if room_list %}
+    <ul>
+      {% for room in room_list %}
+      <li>
+        <a href="{{ room.get_absolute_url }}">{{ room.name }}</a>
+        ({{room.name}})
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No available room.</p>
+  {% endif %}
+{% endblock %}
